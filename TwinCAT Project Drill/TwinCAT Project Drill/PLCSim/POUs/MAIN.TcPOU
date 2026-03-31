@@ -1,0 +1,306 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="MAIN" Id="{2f50e633-040b-41a6-bbd8-1ef463924144}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	ixLampStarted	AT %I* : BOOL;
+	ixSliderAout 	AT %I* : BOOL; 
+	ixSliderAin 	AT %I* : BOOL; 
+	ixSliderBout 	AT %I* : BOOL; 
+	ixSliderBin 	AT %I* : BOOL; 
+	ixDrillDown 	AT %I* : BOOL;
+	ixDrillUp		AT %I* : BOOL;
+	
+	qxButtonStart	AT %Q* : BOOL;
+	qxButtonStop	AT %Q* : BOOL;
+	qxSliderAout	AT %Q* : BOOL;
+	qxSliderAin		AT %Q* : BOOL;
+	qxSliderBout	AT %Q* : BOOL;
+	qxSliderBin		AT %Q* : BOOL;
+	qxDrillUp		AT %Q* : BOOL;
+	qxDrillDown		AT %Q* : BOOL;
+	
+	mxReset 		: BOOL;
+	mxCubeInvisible : BOOL;
+	
+	
+	nPosSliderA 	: INT:=0;
+	nPosSliderB 	: INT:=0;
+	nPosDrill 		: INT:=0;
+	nPosXCube		: INT:=0;
+	nPosYCube		: INT:=0;
+	nSpeed 			: INT:=1;
+	nCnt			: INT:=0;
+	nErrorCnt		: INT:=0;
+	nSeq: INT;
+	
+	fbTONAin:TON;
+	fbTONAout:TON;
+	fbTONBin:TON;
+	fbTONBout:TON;
+	fbTONDrillUp:TON;
+	fbTONADrillDown:TON;
+	
+	
+END_VAR
+
+    ]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Anders Nilsson Exam 2022
+
+// Slider A
+IF ixSliderAout AND NOT ixSliderAin THEN
+	nPosSliderA := nPosSliderA-nSpeed;
+	IF nPosSliderA < -75 THEN
+		nPosSliderA := -75;
+	END_IF
+END_IF
+
+IF ixSliderAin AND NOT ixSliderAout THEN
+	nPosSliderA := nPosSliderA+nSpeed;
+	IF nPosSliderA > 0 THEN
+		nPosSliderA := 0;
+	END_IF
+END_IF
+
+fbTONAin.PT := T#1S;
+fbTONAin.IN := nPosSliderA = 0;
+fbTONAin();
+qxSliderAin := fbTONAin.Q;
+
+fbTONAout.PT := T#1S;
+fbTONAout.IN := nPosSliderA = -75;
+fbTONAout();
+qxSliderAout := fbTONAout.Q;
+
+
+
+// Slider B
+IF ixSliderBout AND NOT ixSliderBin THEN
+	nPosSliderB := nPosSliderB + nSpeed;
+	IF nPosSliderB > 0 THEN
+		nPosSliderB := 0;
+	END_IF
+	
+END_IF
+
+IF ixSliderBin AND NOT ixSliderBout THEN
+	nPosSliderB := nPosSliderB - nSpeed;
+	IF nPosSliderB< -75 THEN
+		nPosSliderB := -75;
+	END_IF
+END_IF
+
+fbTONBin.PT := T#1S;
+fbTONBin.IN := nPosSliderB = -75;
+fbTONBin();
+qxSliderBin := fbTONBin.Q;
+
+fbTONBout.PT := T#1S;
+fbTONBout.IN := nPosSliderB = 0;
+fbTONBout();
+qxSliderBout := fbTONBout.Q;
+
+
+
+
+// Drill 
+IF ixDrillDown AND NOT ixDrillUp THEN
+	nPosDrill := nPosDrill + nSpeed;
+	IF nPosDrill > 35 THEN
+		nPosDrill := 35;
+	END_IF
+END_IF
+	
+IF ixDrillUp AND NOT ixDrillDown THEN
+	nPosDrill := nPosDrill - nSpeed;
+	IF nPosDrill < 0 THEN
+		nPosDrill := 0;
+	END_IF
+END_IF
+	
+fbTONDrillUp.PT := T#1S;
+fbTONDrillUp.IN := nPosDrill = 0;
+fbTONDrillUp();
+qxDrillUp := fbTONDrillUp.Q;
+
+fbTONADrillDown.PT := T#1S;
+fbTONADrillDown.IN := nPosDrill = 35;
+fbTONADrillDown();
+qxDrillDown := fbTONADrillDown.Q;
+
+
+	
+IF	mxReset THEN
+	nSeq 		:= 10;
+	nCnt 		:= 0;
+	nErrorCnt   := 0;
+	nPosSliderA := 0;
+	nPosSliderB := 0;
+	nPosDrill 	:= 0;
+	nPosXCube   := 0;
+	nPosYCube   := 0;
+	mxCubeInvisible := FALSE;
+END_IF
+	
+
+	
+// Cube
+CASE nSeq OF 
+	0: 	//Start and Init Slider A in position
+		IF 	qxSliderAIn THEN
+			nPosXCube := 0;
+		    nPosYCube := 0;
+			mxCubeInvisible := FALSE;
+			nSeq := 10;
+		END_IF
+		
+	10:	//Slide A out
+		nPosXCube := nPosSliderA;
+		IF qxSliderAout THEN
+			nSeq := 20;
+		END_IF
+		
+		//Error
+		IF  ixSliderAout AND ( NOT qxSliderBout OR NOT qxDrillUp) THEN
+			nSeq := 100;
+		END_IF
+	
+		
+	20:	//Drill
+	
+		IF qxDrillDown THEN
+			nSeq := 30;
+		END_IF
+		
+		//Error
+		IF 	NOT qxSliderAout OR NOT qxSliderBout  THEN
+			nSeq := 100;
+		END_IF
+		
+		
+	30:  //Slide B in cube out
+	
+	    IF qxSliderBin AND NOT qxSliderAout THEN
+			nCnt := nCnt +1;
+			mxCubeInvisible := TRUE;
+			nSeq := 0;
+		END_IF
+			
+	100: //Error
+		mxCubeInvisible := TRUE;
+		IF 	qxSliderAIn THEN
+			nErrorCnt := nErrorCnt +1;
+			nSeq := 0;
+		END_IF
+	
+	
+END_CASE
+
+	
+	
+	
+	
+	
+]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="373" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="2" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="30" Count="1" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="25" Count="1" />
+      <LineId Id="34" Count="1" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="296" Count="0" />
+      <LineId Id="285" Count="0" />
+      <LineId Id="297" Count="0" />
+      <LineId Id="299" Count="0" />
+      <LineId Id="298" Count="0" />
+      <LineId Id="104" Count="0" />
+      <LineId Id="302" Count="3" />
+      <LineId Id="300" Count="0" />
+      <LineId Id="89" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="37" Count="7" />
+      <LineId Id="46" Count="5" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="307" Count="0" />
+      <LineId Id="309" Count="8" />
+      <LineId Id="308" Count="0" />
+      <LineId Id="98" Count="1" />
+      <LineId Id="56" Count="0" />
+      <LineId Id="58" Count="4" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="70" Count="1" />
+      <LineId Id="73" Count="4" />
+      <LineId Id="63" Count="1" />
+      <LineId Id="321" Count="8" />
+      <LineId Id="320" Count="0" />
+      <LineId Id="103" Count="0" />
+      <LineId Id="259" Count="1" />
+      <LineId Id="263" Count="0" />
+      <LineId Id="266" Count="0" />
+      <LineId Id="280" Count="0" />
+      <LineId Id="269" Count="1" />
+      <LineId Id="267" Count="0" />
+      <LineId Id="282" Count="1" />
+      <LineId Id="275" Count="0" />
+      <LineId Id="264" Count="0" />
+      <LineId Id="261" Count="0" />
+      <LineId Id="231" Count="0" />
+      <LineId Id="101" Count="0" />
+      <LineId Id="81" Count="0" />
+      <LineId Id="120" Count="0" />
+      <LineId Id="122" Count="0" />
+      <LineId Id="273" Count="0" />
+      <LineId Id="271" Count="1" />
+      <LineId Id="276" Count="0" />
+      <LineId Id="228" Count="0" />
+      <LineId Id="233" Count="0" />
+      <LineId Id="135" Count="1" />
+      <LineId Id="281" Count="0" />
+      <LineId Id="139" Count="2" />
+      <LineId Id="234" Count="0" />
+      <LineId Id="221" Count="0" />
+      <LineId Id="241" Count="0" />
+      <LineId Id="235" Count="0" />
+      <LineId Id="223" Count="0" />
+      <LineId Id="219" Count="1" />
+      <LineId Id="175" Count="0" />
+      <LineId Id="250" Count="0" />
+      <LineId Id="249" Count="0" />
+      <LineId Id="179" Count="1" />
+      <LineId Id="247" Count="0" />
+      <LineId Id="246" Count="0" />
+      <LineId Id="242" Count="0" />
+      <LineId Id="244" Count="1" />
+      <LineId Id="243" Count="0" />
+      <LineId Id="181" Count="1" />
+      <LineId Id="254" Count="1" />
+      <LineId Id="178" Count="0" />
+      <LineId Id="278" Count="0" />
+      <LineId Id="184" Count="0" />
+      <LineId Id="176" Count="0" />
+      <LineId Id="134" Count="0" />
+      <LineId Id="236" Count="0" />
+      <LineId Id="284" Count="0" />
+      <LineId Id="238" Count="0" />
+      <LineId Id="268" Count="0" />
+      <LineId Id="279" Count="0" />
+      <LineId Id="240" Count="0" />
+      <LineId Id="237" Count="0" />
+      <LineId Id="126" Count="0" />
+      <LineId Id="123" Count="0" />
+      <LineId Id="121" Count="0" />
+      <LineId Id="65" Count="4" />
+      <LineId Id="55" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

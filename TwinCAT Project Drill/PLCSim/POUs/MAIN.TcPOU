@@ -1,0 +1,227 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="MAIN" Id="{2f50e633-040b-41a6-bbd8-1ef463924144}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	ixLampStarted	AT %I* : BOOL;
+	ixSliderAout 	AT %I* : BOOL; 
+	ixSliderAin 	AT %I* : BOOL; 
+	ixSliderBout 	AT %I* : BOOL; 
+	ixSliderBin 	AT %I* : BOOL; 
+	ixDrillDown 	AT %I* : BOOL;
+	ixDrillUp		AT %I* : BOOL;
+	ixLampEmStopOk	AT %I* : BOOL;
+	ixLampSafetyOk  AT %I* : BOOL;
+	ixLampHomePos	AT %I* : BOOL;
+	
+	qxButtonStart	AT %Q* : BOOL;
+	qxButtonStop	AT %Q* : BOOL;
+	qxSliderAout	AT %Q* : BOOL;
+	qxSliderAin		AT %Q* : BOOL;
+	qxSliderBout	AT %Q* : BOOL;
+	qxSliderBin		AT %Q* : BOOL;
+	qxDrillUp		AT %Q* : BOOL;
+	qxDrillDown		AT %Q* : BOOL;
+	
+	qxAuto			AT %Q* : BOOL;
+	qxBtn1EmStopOk	AT %Q* : BOOL;
+	qxBtn2EmStopOk	AT %Q* : BOOL;
+	qxSafety1StopOk	AT %Q* : BOOL;
+	qxSafety2StopOk	AT %Q* : BOOL;
+	qxBtnReset  	AT %Q* : BOOL;
+	qxBtnAout		AT %Q* : BOOL;
+	qxBtnAin		AT %Q* : BOOL;
+	qxBtnBout		AT %Q* : BOOL;
+	qxBtnBin		AT %Q* : BOOL;
+	qxBtnDrillOut	AT %Q* : BOOL;
+	qxBtnDrillIn	AT %Q* : BOOL;
+	mxReset 		: BOOL;
+	mxCubeInvisible : BOOL;
+	mxBtn1EmStop : BOOL;
+	mxBtn2EmStop : BOOL;	
+	
+	nPosSliderA 	: INT:=0;
+	nPosSliderB 	: INT:=0;
+	nPosDrill 		: INT:=0;
+	nPosXCube		: INT:=0;
+	nPosYCube		: INT:=0;
+	nSpeed 			: INT:=1;
+	nCnt			: INT:=0;
+	nErrorCnt		: INT:=0;
+	nSeq: INT;
+	
+	fbTONAin:TON;
+	fbTONAout:TON;
+	fbTONBin:TON;
+	fbTONBout:TON;
+	fbTONDrillUp:TON;
+	fbTONADrillDown:TON;
+	
+	
+END_VAR
+
+    ]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Anders Nilsson 20230112
+
+qxBtn1EmStopOk := NOT mxBtn1EmStop;
+qxBtn2EmStopOk := NOT mxBtn2EmStop;
+
+// Slider A
+IF ixSliderAout AND NOT ixSliderAin THEN
+	nPosSliderA := nPosSliderA-nSpeed;
+	IF nPosSliderA < -75 THEN
+		nPosSliderA := -75;
+	END_IF
+END_IF
+
+IF ixSliderAin AND NOT ixSliderAout THEN
+	nPosSliderA := nPosSliderA+nSpeed;
+	IF nPosSliderA > 0 THEN
+		nPosSliderA := 0;
+	END_IF
+END_IF
+
+fbTONAin.PT := T#1S;
+fbTONAin.IN := nPosSliderA = 0;
+fbTONAin();
+qxSliderAin := fbTONAin.Q;
+
+fbTONAout.PT := T#1S;
+fbTONAout.IN := nPosSliderA = -75;
+fbTONAout();
+qxSliderAout := fbTONAout.Q;
+
+
+
+// Slider B
+IF ixSliderBout AND NOT ixSliderBin THEN
+	nPosSliderB := nPosSliderB + nSpeed;
+	IF nPosSliderB > 0 THEN
+		nPosSliderB := 0;
+	END_IF
+	
+END_IF
+
+IF ixSliderBin AND NOT ixSliderBout THEN
+	nPosSliderB := nPosSliderB - nSpeed;
+	IF nPosSliderB< -75 THEN
+		nPosSliderB := -75;
+	END_IF
+END_IF
+
+fbTONBin.PT := T#1S;
+fbTONBin.IN := nPosSliderB = -75;
+fbTONBin();
+qxSliderBin := fbTONBin.Q;
+
+fbTONBout.PT := T#1S;
+fbTONBout.IN := nPosSliderB = 0;
+fbTONBout();
+qxSliderBout := fbTONBout.Q;
+
+
+
+
+// Drill 
+IF ixDrillDown AND NOT ixDrillUp THEN
+	nPosDrill := nPosDrill + nSpeed;
+	IF nPosDrill > 35 THEN
+		nPosDrill := 35;
+	END_IF
+END_IF
+	
+IF ixDrillUp AND NOT ixDrillDown THEN
+	nPosDrill := nPosDrill - nSpeed;
+	IF nPosDrill < 0 THEN
+		nPosDrill := 0;
+	END_IF
+END_IF
+	
+fbTONDrillUp.PT := T#1S;
+fbTONDrillUp.IN := nPosDrill = 0;
+fbTONDrillUp();
+qxDrillUp := fbTONDrillUp.Q;
+
+fbTONADrillDown.PT := T#1S;
+fbTONADrillDown.IN := nPosDrill = 35;
+fbTONADrillDown();
+qxDrillDown := fbTONADrillDown.Q;
+
+
+	
+IF	mxReset THEN
+	nSeq 		:= 10;
+	nCnt 		:= 0;
+	nErrorCnt   := 0;
+	nPosSliderA := 0;
+	nPosSliderB := 0;
+	nPosDrill 	:= 0;
+	nPosXCube   := 0;
+	nPosYCube   := 0;
+	mxCubeInvisible := FALSE;
+END_IF
+	
+
+	
+// Cube
+CASE nSeq OF 
+	0: 	//Start and Init Slider A in position
+		IF 	qxSliderAIn THEN
+			nPosXCube := 0;
+		    nPosYCube := 0;
+			mxCubeInvisible := FALSE;
+			nSeq := 10;
+		END_IF
+		
+	10:	//Slide A out
+		nPosXCube := nPosSliderA;
+		IF qxSliderAout THEN
+			nSeq := 20;
+		END_IF
+		
+		//Error
+		IF  ixSliderAout AND ( NOT qxSliderBout OR NOT qxDrillUp) THEN
+			nSeq := 100;
+		END_IF
+	
+		
+	20:	//Drill
+	
+		IF qxDrillDown THEN
+			nSeq := 30;
+		END_IF
+		
+		//Error
+		IF 	NOT qxSliderAout OR NOT qxSliderBout  THEN
+			nSeq := 100;
+		END_IF
+		
+		
+	30:  //Slide B in cube out
+	
+	    IF qxSliderBin AND NOT qxSliderAout THEN
+			nCnt := nCnt +1;
+			mxCubeInvisible := TRUE;
+			nSeq := 0;
+		END_IF
+			
+	100: //Error
+		mxCubeInvisible := TRUE;
+		IF 	qxSliderAIn THEN
+			nErrorCnt := nErrorCnt +1;
+			nSeq := 0;
+		END_IF
+	
+	
+END_CASE
+
+	
+	
+	
+	
+	
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

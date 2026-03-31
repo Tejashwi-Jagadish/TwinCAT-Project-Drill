@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="BLINK" Id="{dd599460-7c02-412a-aaaa-8ca0d00c32a3}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK BLINK
+VAR_INPUT
+	OnTime : TIME;
+    OffTime : TIME;
+END_VAR
+
+VAR_OUTPUT
+    OUT : BOOL;
+END_VAR
+
+VAR
+    fbTon  : TON;
+    fbToff : TON;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbTon.PT  := OnTime;
+fbToff.PT := OffTime;
+
+fbTon.IN := NOT fbToff.Q;
+fbTon();
+
+fbToff.IN := fbTon.Q;
+fbToff();
+
+Out := fbTon.Q;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

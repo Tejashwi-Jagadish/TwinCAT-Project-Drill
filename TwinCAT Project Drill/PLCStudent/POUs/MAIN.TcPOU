@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="MAIN" Id="{54befd21-3517-4010-bc97-4f29dd46757e}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	fbSequence : ControlFBD_Sequence;
+	fbBlink    : BLINK;
+	
+	mxAutoRunOk: BOOL;
+	mxAutoModeReady: BOOL;
+	ixSliderAout: BOOL;
+	ixDrillDown: BOOL;
+	ixDrillUp: BOOL;
+	ixSliderBout: BOOL;
+	ixSliderBin: BOOL;
+	
+	mxAutoAout       : BOOL;
+    mxAutoDrillDown: BOOL;
+    mxAutoDrillUp    : BOOL;
+    mxAutoBout       : BOOL;
+    mxAutoBin        : BOOL;
+    mxAutoAin        : BOOL;
+	
+END_VAR
+
+    ]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[ControlFBD();
+(* Auto sequence engine *)
+fbSequence(
+   mxAutoRunOk     := ControlFBD.mxAutoRunOk,
+    mxAutoModeReady := ControlFBD.mxAutoModeReady,
+    ixSliderAout    := ControlFBD.ixSliderAout,
+    ixDrillDown     := ControlFBD.ixDrillDown,
+    ixDrillUp       := ControlFBD.ixDrillUp,
+	ixSliderAin    := ControlFBD.ixSliderAin,
+    ixSliderBout    := ControlFBD.ixSliderBout,
+    ixSliderBin     := ControlFBD.ixSliderBin
+);
+
+ControlFBD.mxAutoAout := fbSequence.mxAutoAOut;
+ControlFBD.mxAutoAin := fbSequence.mxAutoAIn;
+ControlFBD.mxAutoBout := fbSequence.mxAutoBout;
+ControlFBD.mxAutoBin := fbSequence.mxAutoBin;
+ControlFBD.mxAutoDrillOut := fbSequence.mxAutoDrillDown;
+ControlFBD.mxAutoDrillUp := fbSequence.mxAutoDrillUp;
+
+fbBlink(
+    OnTime := T#0.5S,
+    OffTime := T#1S
+);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

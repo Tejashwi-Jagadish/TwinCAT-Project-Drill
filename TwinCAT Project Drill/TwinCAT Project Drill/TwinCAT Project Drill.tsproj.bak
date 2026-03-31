@@ -1,0 +1,210 @@
+<?xml version="1.0"?>
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.29">
+	<Project ProjectGUID="{B44999BF-4E81-4CA3-9A97-57610D6FFEB3}" Target64Bit="true" ShowHideConfigurations="#x306">
+		<System>
+			<Settings MaxCpus="16" NonWinCpus="1"/>
+			<Tasks>
+				<Task Id="3" Priority="20" CycleTime="300000" AmsPort="350" AdtTasks="true">
+					<Name>PlcTask</Name>
+				</Task>
+			</Tasks>
+		</System>
+		<Plc>
+			<Project GUID="{E92C0D63-EC27-4B8B-8304-58C90E154294}" Name="PLCSim" PrjFilePath="PLCSim\PLCSim.plcproj" TmcFilePath="PLCSim\PLCSim.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="PLCSim\PLCSim.tmc">
+					<Name>PLCSim Instance</Name>
+					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
+					<Vars VarGrpType="1">
+						<Name>PlcTask Inputs</Name>
+						<Var>
+							<Name>MAIN.ixLampStarted</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.ixSliderAout</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.ixSliderAin</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.ixSliderBout</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.ixSliderBin</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.ixDrillDown</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.ixDrillUp</Name>
+							<Type>BOOL</Type>
+						</Var>
+					</Vars>
+					<Vars VarGrpType="2" AreaNo="1">
+						<Name>PlcTask Outputs</Name>
+						<Var>
+							<Name>MAIN.qxButtonStart</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.qxButtonStop</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.qxSliderAout</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.qxSliderAin</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.qxSliderBout</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.qxSliderBin</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.qxDrillUp</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.qxDrillDown</Name>
+							<Type>BOOL</Type>
+						</Var>
+					</Vars>
+					<Contexts>
+						<Context>
+							<Id NeedCalleeCall="true">0</Id>
+							<Name>PlcTask</Name>
+							<ManualConfig>
+								<OTCID>#x02010030</OTCID>
+							</ManualConfig>
+							<Priority>20</Priority>
+							<CycleTime>30000000</CycleTime>
+						</Context>
+					</Contexts>
+					<TaskPouOids>
+						<TaskPouOid Prio="20" OTCID="#x08502001"/>
+					</TaskPouOids>
+				</Instance>
+			</Project>
+			<Project GUID="{7C8EEA82-B80E-4F1E-8DE1-4DB4142D331C}" Name="PLCStudent" PrjFilePath="PLCStudent\PLCStudent.plcproj" TmcFilePath="PLCStudent\PLCStudent.tmc" ReloadTmc="true" AmsPort="852" FileArchiveSettings="#x000e" SymbolicMapping="true">
+				<Instance Id="#x08502040" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="PLCStudent\PLCStudent.tmc">
+					<Name>PLCStudent Instance</Name>
+					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
+					<Vars VarGrpType="1">
+						<Name>PlcTask Inputs</Name>
+						<Var>
+							<Name>ControlFBD.ixButtonStart</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>ControlFBD.ixButtonStop</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>ControlFBD.ixSliderAout</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>ControlFBD.ixSliderAin</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>ControlFBD.ixSliderBout</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>ControlFBD.ixSliderBin</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>ControlFBD.ixDrillUp</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>ControlFBD.ixDrillDown</Name>
+							<Type>BOOL</Type>
+						</Var>
+					</Vars>
+					<Vars VarGrpType="2" AreaNo="1">
+						<Name>PlcTask Outputs</Name>
+						<Var>
+							<Name>ControlFBD.qxLampStarted</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>ControlFBD.gxSliderAout</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>ControlFBD.gxSliderAin</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>ControlFBD.gxSliderBout</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>ControlFBD.gxSliderBin</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>ControlFBD.gxDrillDown</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>ControlFBD.gxDrillUp</Name>
+							<Type>BOOL</Type>
+						</Var>
+					</Vars>
+					<Contexts>
+						<Context>
+							<Id NeedCalleeCall="true">0</Id>
+							<Name>PlcTask</Name>
+							<ManualConfig>
+								<OTCID>#x02010030</OTCID>
+							</ManualConfig>
+							<Priority>20</Priority>
+							<CycleTime>30000000</CycleTime>
+						</Context>
+					</Contexts>
+					<TaskPouOids>
+						<TaskPouOid Prio="20" OTCID="#x08502041"/>
+					</TaskPouOids>
+				</Instance>
+			</Project>
+		</Plc>
+		<Io/>
+	</Project>
+	<Mappings>
+		<MappingInfo Identifier="{00000000-2001-0850-0020-500840205008}" Id="#x02030010"/>
+		<OwnerA Name="TIPC^PLCSim^PLCSim Instance">
+			<OwnerB Name="TIPC^PLCStudent^PLCStudent Instance">
+				<Link VarA="PlcTask Inputs^MAIN.ixDrillDown" VarB="PlcTask Outputs^ControlFBD.gxDrillDown"/>
+				<Link VarA="PlcTask Inputs^MAIN.ixDrillUp" VarB="PlcTask Outputs^ControlFBD.gxDrillUp"/>
+				<Link VarA="PlcTask Inputs^MAIN.ixLampStarted" VarB="PlcTask Outputs^ControlFBD.qxLampStarted"/>
+				<Link VarA="PlcTask Inputs^MAIN.ixSliderAin" VarB="PlcTask Outputs^ControlFBD.gxSliderAin"/>
+				<Link VarA="PlcTask Inputs^MAIN.ixSliderAout" VarB="PlcTask Outputs^ControlFBD.gxSliderAout"/>
+				<Link VarA="PlcTask Inputs^MAIN.ixSliderBin" VarB="PlcTask Outputs^ControlFBD.gxSliderBin"/>
+				<Link VarA="PlcTask Inputs^MAIN.ixSliderBout" VarB="PlcTask Outputs^ControlFBD.gxSliderBout"/>
+				<Link VarA="PlcTask Outputs^MAIN.qxButtonStart" VarB="PlcTask Inputs^ControlFBD.ixButtonStart"/>
+				<Link VarA="PlcTask Outputs^MAIN.qxButtonStop" VarB="PlcTask Inputs^ControlFBD.ixButtonStop"/>
+				<Link VarA="PlcTask Outputs^MAIN.qxDrillDown" VarB="PlcTask Inputs^ControlFBD.ixDrillDown"/>
+				<Link VarA="PlcTask Outputs^MAIN.qxDrillUp" VarB="PlcTask Inputs^ControlFBD.ixDrillUp"/>
+				<Link VarA="PlcTask Outputs^MAIN.qxSliderAin" VarB="PlcTask Inputs^ControlFBD.ixSliderAin"/>
+				<Link VarA="PlcTask Outputs^MAIN.qxSliderAout" VarB="PlcTask Inputs^ControlFBD.ixSliderAout"/>
+				<Link VarA="PlcTask Outputs^MAIN.qxSliderBin" VarB="PlcTask Inputs^ControlFBD.ixSliderBin"/>
+				<Link VarA="PlcTask Outputs^MAIN.qxSliderBout" VarB="PlcTask Inputs^ControlFBD.ixSliderBout"/>
+			</OwnerB>
+		</OwnerA>
+	</Mappings>
+</TcSmProject>

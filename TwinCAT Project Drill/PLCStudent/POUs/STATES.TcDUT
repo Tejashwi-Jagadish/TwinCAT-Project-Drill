@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="STATES" Id="{2daa96d6-1e89-4691-9a9f-793c8ba40cef}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+{attribute 'to_string'}
+TYPE STATES :
+(
+	init,Aout,drillDown,drillUp,Ain,Bout,Bin
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

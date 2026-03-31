@@ -1,0 +1,87 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\alpho\\Desktop\\TwinCAT Project Drill Man Auto\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{7C8EEA82-B80E-4F1E-8DE1-4DB4142D331C}|TwinCAT Project Drill\\PLCStudent\\PLCStudent.plcproj|C:\\Users\\alpho\\Desktop\\TwinCAT Project Drill Man Auto\\TwinCAT Project Drill\\PLCStudent\\POUs\\ControlFBD.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{7C8EEA82-B80E-4F1E-8DE1-4DB4142D331C}|TwinCAT Project Drill\\PLCStudent\\PLCStudent.plcproj|solutionrelative:TwinCAT Project Drill\\PLCStudent\\POUs\\ControlFBD.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E92C0D63-EC27-4B8B-8304-58C90E154294}|TwinCAT Project Drill\\PLCSim\\PLCSim.plcproj|C:\\Users\\alpho\\Desktop\\TwinCAT Project Drill Man Auto\\TwinCAT Project Drill\\PLCSim\\VISUs\\Visualization.TcVIS||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{E92C0D63-EC27-4B8B-8304-58C90E154294}|TwinCAT Project Drill\\PLCSim\\PLCSim.plcproj|solutionrelative:TwinCAT Project Drill\\PLCSim\\VISUs\\Visualization.TcVIS||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7C8EEA82-B80E-4F1E-8DE1-4DB4142D331C}|TwinCAT Project Drill\\PLCStudent\\PLCStudent.plcproj|C:\\Users\\alpho\\Desktop\\TwinCAT Project Drill Man Auto\\TwinCAT Project Drill\\PLCStudent\\POUs\\MAIN.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{7C8EEA82-B80E-4F1E-8DE1-4DB4142D331C}|TwinCAT Project Drill\\PLCStudent\\PLCStudent.plcproj|solutionrelative:TwinCAT Project Drill\\PLCStudent\\POUs\\MAIN.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7C8EEA82-B80E-4F1E-8DE1-4DB4142D331C}|TwinCAT Project Drill\\PLCStudent\\PLCStudent.plcproj|C:\\Users\\alpho\\Desktop\\TwinCAT Project Drill Man Auto\\TwinCAT Project Drill\\PLCStudent\\POUs\\ControlFBD_Sequence.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{7C8EEA82-B80E-4F1E-8DE1-4DB4142D331C}|TwinCAT Project Drill\\PLCStudent\\PLCStudent.plcproj|solutionrelative:TwinCAT Project Drill\\PLCStudent\\POUs\\ControlFBD_Sequence.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 322,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Visualization",
+              "DocumentMoniker": "C:\\Users\\alpho\\Desktop\\TwinCAT Project Drill Man Auto\\TwinCAT Project Drill\\PLCSim\\VISUs\\Visualization.TcVIS",
+              "RelativeDocumentMoniker": "TwinCAT Project Drill\\PLCSim\\VISUs\\Visualization.TcVIS",
+              "ToolTip": "Visualization [TwinCAT Project Drill.PLCSim]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-03-21T03:48:03.372Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 278,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MAIN",
+              "DocumentMoniker": "C:\\Users\\alpho\\Desktop\\TwinCAT Project Drill Man Auto\\TwinCAT Project Drill\\PLCStudent\\POUs\\MAIN.TcPOU",
+              "RelativeDocumentMoniker": "TwinCAT Project Drill\\PLCStudent\\POUs\\MAIN.TcPOU",
+              "ToolTip": "MAIN [TwinCAT Project Drill.PLCStudent]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-03-15T04:29:40.749Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ControlFBD",
+              "DocumentMoniker": "C:\\Users\\alpho\\Desktop\\TwinCAT Project Drill Man Auto\\TwinCAT Project Drill\\PLCStudent\\POUs\\ControlFBD.TcPOU",
+              "RelativeDocumentMoniker": "TwinCAT Project Drill\\PLCStudent\\POUs\\ControlFBD.TcPOU",
+              "ToolTip": "ControlFBD [TwinCAT Project Drill.PLCStudent]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-03-19T03:52:36.856Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ControlFBD_Sequence",
+              "DocumentMoniker": "C:\\Users\\alpho\\Desktop\\TwinCAT Project Drill Man Auto\\TwinCAT Project Drill\\PLCStudent\\POUs\\ControlFBD_Sequence.TcPOU",
+              "RelativeDocumentMoniker": "TwinCAT Project Drill\\PLCStudent\\POUs\\ControlFBD_Sequence.TcPOU",
+              "ToolTip": "ControlFBD_Sequence [TwinCAT Project Drill.PLCStudent]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-03-15T05:02:40.086Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

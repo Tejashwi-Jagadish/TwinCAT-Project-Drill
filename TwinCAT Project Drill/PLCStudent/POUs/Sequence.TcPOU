@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="Sequence" Id="{793d4fda-7350-441c-8951-b087c0a3ffd5}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Sequence
+VAR_INPUT
+	miSeq: INT;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	mxAutoAout: BOOL;
+	mxAutoDrillout: BOOL;
+	mxAutoRunOk: BOOL;
+	ixSliderAout: BOOL;
+	mxAutoBin: BOOL;
+	mxAutoBout: BOOL;
+	ixDrillDown: BOOL;
+	ixDrillUp: BOOL;
+	mxAutoAin: BOOL;
+	ixSliderBout: BOOL;
+	ixSliderBin: BOOL;
+	ixSliderAin: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+CASE miSeq OF
+
+    STATES.init:
+        IF mxAutoRunOk THEN
+            mxAutoAout := TRUE;
+            miSeq := STATES.Aout;
+        END_IF
+
+    STATES.Aout:
+        IF ixSliderAout THEN
+            mxAutoAout := FALSE;
+            mxAutoDrillout := TRUE;
+            miSeq := STATES.drillDown;
+        END_IF
+
+      STATES.drillDown:
+          IF ixDrillDown THEN
+             mxAutoDrillOut := FALSE;
+             miSeq := STATES.drillUp;
+        END_IF
+
+
+      STATES.drillUp:
+	     IF ixDrillUp THEN
+            mxAutoBout := TRUE;
+            miSeq := STATES.Bout;
+        END_IF
+
+
+      STATES.Ain:
+           mxAutoAin := TRUE;
+
+        IF ixSliderAin THEN
+           mxAutoAin := FALSE;
+           mxAutoAout := TRUE;
+           miSeq := STATES.Aout;
+        END_IF
+		
+		
+      STATES.Bout:
+          IF ixSliderBout THEN
+             mxAutoBout := FALSE;
+             mxAutoBin := TRUE;
+             miSeq := STATES.Bin;
+         END_IF
+	
+	  STATES.Bin:
+	      IF ixSliderBin THEN
+             mxAutoBin := FALSE;
+             mxAutoAin := TRUE;
+             miSeq := STATES.Ain;
+          END_IF
+	  	  
+END_CASE]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
