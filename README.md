@@ -1,4 +1,5 @@
 # Drilling Machine PLC — TwinCAT 3
+
 > Exercise 3 — Drilling Machine Manual/Auto Mode  
 > University West | Course: Industrial Automation  
 > Programmed in TwinCAT 3 (IEC 61131-3)
@@ -7,99 +8,192 @@
 
 ## 📋 Project Overview
 
-This project implements a PLC control program for a simulated drilling machine using TwinCAT 3. The program follows **EU Machinery Regulation (EU) 2023/1230** safety requirements and demonstrates good programming structure using FBD, SFC, and Structured Text.
+A PLC control program for a simulated drilling machine built in TwinCAT 3, following  
+**EU Machinery Regulation (EU) 2023/1230** safety requirements.  
+Demonstrates structured programming using FBD, SFC, and Structured Text.
 
-The machine has three moving parts:
-- **Slider A** — pushes the workpiece into drilling position
-- **Drill** — moves down to drill, then retracts back up
-- **Slider B** — moves the finished workpiece out of the machine
+The machine has three actuators:
+
+| Actuator | Function |
+|----------|----------|
+| **Slider A** | Pushes the workpiece into drilling position |
+| **Drill** | Moves down to drill, then retracts back up |
+| **Slider B** | Moves the finished workpiece out of the machine |
 
 ---
 
 ## 🏗️ Project Structure
 
 ```
-TwinCAT Project Drill/
+TwinCAT Project Drill Man Auto/
 │
-├── PLCStudent/
-│   └── PLCStudent Project/
-│       ├── DUTs/
-│       │   └── STATES (ENUM)        ← State names for sequence
-│       ├── GVLs/                    ← Global Variable Lists
-│       └── POUs/
-│           ├── BLINK (FB)           ← Reusable blink function block
-│           ├── ControlFBD (PRG)     ← Safety + Mode + Output logic
-│           ├── ControlFBD_Sequence (FB) ← Auto sequence in SFC
-│           └── MAIN (PRG)           ← Connects everything together
+├── TwinCAT Project Drill.sln              ← Open this in TwinCAT 3 XAE
 │
-└── PLCSim/
-    └── PLCSim Project/
-        └── MAIN (PRG)               ← Simulation of physical machine
+└── TwinCAT Project Drill/
+    ├── TwinCAT Project Drill.tsproj       ← TwinCAT solution/system config
+    │
+    ├── PLCStudent/                        ← Student control program
+    │   ├── POUs/
+    │   │   ├── BLINK.TcPOU               ← Function Block (ST) — reusable blink timer
+    │   │   ├── ControlFBD.TcPOU          ← Program (FBD) — safety, mode, output logic
+    │   │   ├── ControlFBD_Sequence.TcPOU ← Function Block (SFC) — automatic drill cycle
+    │   │   ├── MAIN.TcPOU                ← Program (ST) — connects everything together
+    │   │   ├── POUfbd.TcPOU              ← Additional FBD program
+    │   │   ├── Sequence.TcPOU            ← Additional sequence program
+    │   │   └── STATES.TcDUT              ← ENUM: init, Aout, drillDown, drillUp, Ain, Bin, Bout
+    │   └── GVLs/                         ← Global Variable Lists
+    │
+    └── PLCSim/                            ← Machine simulation
+        ├── POUs/
+        │   └── MAIN.TcPOU                ← Program (ST) — simulates physical machine I/O
+        └── VISUs/
+            └── Visualization.TcVIS       ← HMI visualization panel
 ```
+
+---
+
+## 💻 Getting Started
+
+### Step 1 — Install TwinCAT 3
+
+TwinCAT 3 XAE is free to download from Beckhoff. It runs on top of Visual Studio.
+
+1. Go to the Beckhoff download page:  
+   👉 https://www.beckhoff.com/en-en/support/download-finder/software-and-tools/
+
+2. Search for **TwinCAT 3 XAE** and download the installer (you may need to create a free Beckhoff account)
+
+3. Run the installer and follow the setup wizard  
+   > ⚠️ TwinCAT requires **Windows 10 or 11** (64-bit). It does not run on macOS or Linux.
+
+4. During installation, allow it to install the **TwinCAT RT (real-time) driver** when prompted — this is required to run the PLC simulation
+
+5. Restart your PC after installation
+
+> **Note:** A free 7-day trial license is included with TwinCAT. The project already contains a `TrialLicense.tclrs` file which activates automatically when you open it.
+
+---
+
+### Step 2 — Clone or Download the Project
+
+**Option A — Clone with Git:**
+```bash
+git clone https://github.com/Tejashwi-Jagadish/TwinCAT-Project-Drill.git
+```
+
+**Option B — Download ZIP:**
+1. Click the green **Code** button at the top of this page
+2. Select **Download ZIP**
+3. Extract the ZIP to a folder on your PC (e.g. `C:\TwinCAT Projects\`)
+
+---
+
+### Step 3 — Open the Project
+
+1. Open **TwinCAT XAE Shell** (installed with TwinCAT 3)
+2. Go to **File → Open → Project/Solution**
+3. Navigate to the extracted folder and open:
+   ```
+   TwinCAT Project Drill.sln
+   ```
+4. The solution will load with two PLC instances visible in the Solution Explorer:
+   - **PLCStudent** — the control logic
+   - **PLCSim** — the machine simulation
+
+---
+
+### Step 4 — Activate the Configuration
+
+1. In the top toolbar, click **Activate Configuration** (or press `Ctrl+Shift+F4`)
+2. A dialog will appear asking to switch to **Run Mode** — click **OK**
+3. If prompted about the license, click **7 Days Trial License** → confirm
+
+> This step links TwinCAT to the local real-time runtime and prepares both PLC instances for execution.
+
+---
+
+### Step 5 — Start the PLC
+
+1. In the Solution Explorer, right-click **PLCSim** → **Login**  
+   Then click **Start** (▶) or press `F5`
+
+2. Do the same for **PLCStudent** → **Login** → **Start**
+
+Both PLCs are now running and communicating with each other via linked I/O variables.
+
+---
+
+### Step 6 — Open the Visualization
+
+1. In the Solution Explorer, expand:  
+   `PLCSim → VISUs → Visualization`
+2. Double-click **Visualization** to open the HMI panel
+3. The panel shows the machine state, buttons, lamps, and selector switch
+
+You can now interact with the machine:
+- Toggle the **MAN/AUTO selector**
+- Press **E-Stop** and **Reset**
+- In Manual mode: use individual actuator buttons
+- In Auto mode: press **Start** to run the drill cycle
 
 ---
 
 ## 🔧 POU Descriptions
 
 ### BLINK (Function Block — ST)
-A reusable blink generator used for all indicator lamps.
-- **Input:** `OnTime`, `OffTime` (TIME)
+Reusable blink generator used for all indicator lamps.
+- **Inputs:** `OnTime`, `OffTime` (TIME)
 - **Output:** `OUT` (BOOL)
-- Uses two TON timers internally to toggle output
+- Uses two TON timers internally to toggle the output
 
 ---
 
 ### ControlFBD (Program — FBD)
-The main control logic. Divided into clear numbered networks:
+The main control logic, divided into numbered networks:
 
-| Network | What it does |
-|---------|-------------|
-| 1 | BLINK instance — generates mxBlink signal |
+| Network | Function |
+|---------|----------|
+| 1 | BLINK instance — generates `mxBlink` signal |
 | 2 | E-Stop summation — both buttons ANDed |
 | 3 | E-Stop reset with self-holding latch |
 | 4 | E-Stop lamp — blinks when ready, steady when reset |
 | 5 | Safety stop summation |
 | 6 | Safety stop reset with self-holding latch |
 | 7 | Safety stop lamp |
-| 8 | Manual mode permission (mxManRunOk) |
-| 9 | Auto mode ready (mxAutoModeReady) |
+| 8 | Manual mode permission (`mxManRunOk`) |
+| 9 | Auto mode ready (`mxAutoModeReady`) |
 | 10 | Home position lamp |
 | 11 | Cycle stop latch |
-| 12 | Auto run OK (mxAutoRunOk) |
+| 12 | Auto run OK (`mxAutoRunOk`) |
 | 13 | Start lamp indication |
 | 14–19 | All physical outputs — manual OR auto |
 
 ---
 
 ### ControlFBD_Sequence (Function Block — SFC)
-The automatic drill cycle sequence.
+The automatic drill cycle sequence:
 
-**Cycle order:**
 ```
 Init → Slider A Out → Drill Down → Drill Up → Slider B In → Slider A In → Slider B Out → Init
 ```
 
-Each step:
-- Waits for a **sensor confirmation** before moving to the next step
-- Has an **escape transition** (`NOT mxAutoModeReady → Init_Sequence`) at every step
+- Each step waits for **sensor confirmation** before advancing
+- Every step has an **escape transition** back to Init if Auto mode is lost
 
 ---
 
 ### MAIN (Program — ST)
-Connects ControlFBD and the SFC together every scan cycle.
-
-```
-1. Call ControlFBD()
-2. Pass sensor + permission signals INTO fbSequence
-3. Read auto commands BACK from fbSequence
-4. Write auto commands INTO ControlFBD inputs
-5. Call fbBlink()
-```
+Wires ControlFBD and the SFC together each scan cycle:
+1. Call `ControlFBD()`
+2. Pass sensor + permission signals **into** `fbSequence`
+3. Read auto commands **back** from `fbSequence`
+4. Write auto commands **into** `ControlFBD` inputs
+5. Call `fbBlink()`
 
 ---
 
-### STATES (ENUM — DUT)
-Named states used by the sequence state machine:
+### STATES (DUT — ENUM)
+Named states used by the sequence:
 ```
 init, Aout, drillDown, drillUp, Ain, Bout, Bin
 ```
@@ -109,28 +203,26 @@ init, Aout, drillDown, drillUp, Ain, Bout, Bin
 ## 🔒 Safety Features
 
 ### Emergency Stop
-- Dual channel — **two buttons** must both be released
-- Self-holding reset — operator must **manually press Reset**
+- Dual channel — **both buttons** must be released to reset
+- Self-holding latch — operator must **manually press Reset**
 - Machine does **not restart automatically**
-- Lamp **blinks** when ready to reset → **steady** when safe
+- Lamp blinks when ready to reset → steady when safe
 
 ### Safety Stop
 - Covers safety gates and light curtains
 - Same reset logic as Emergency Stop
-- Required for **Auto mode only**
-- Manual mode allowed without it (per risk assessment)
+- Required for **Auto mode only** (not manual, per risk assessment)
 
 ### Home Position Check
-- All three sensors must confirm safe start position before auto can begin:
-  - Slider A is IN
-  - Slider B is OUT
-  - Drill is UP
+All three sensors must confirm safe position before Auto can start:
+- Slider A is IN
+- Slider B is OUT
+- Drill is UP
 
 ### Cycle Stop
-- Finishes the **current cycle completely**
-- Returns machine to **home position**
-- Then stops and waits
+- Finishes the **current cycle completely** before stopping
 - Machine never stops mid-movement
+- Returns to home position and waits
 
 ---
 
@@ -138,26 +230,25 @@ init, Aout, drillDown, drillUp, Ain, Bout, Bin
 
 ### Manual Mode (Selector = MAN)
 - Individual button control of each actuator
-- Requires: Emergency Stop OK
+- Requires: E-Stop OK
 - Safety stop not required
-- Each button only active while held
+- Buttons are momentary — active only while held
 
 ### Auto Mode (Selector = AUTO)
 - Full automatic drill cycle
-- Requires: Emergency Stop OK + Safety Stop OK + Home Position
-- Operator must press Start to begin
-- Sequence repeats until Cycle Stop or E-Stop
+- Requires: E-Stop OK + Safety Stop OK + Home Position confirmed
+- Operator presses Start to begin; sequence repeats until Cycle Stop or E-Stop
 
 ---
 
-## 🔄 How Manual/Auto Switching Works
+## 🔄 Mode Switching Behaviour
 
 | Event | Result |
 |-------|--------|
-| Selector → MAN | mxManRunOk = TRUE, SFC escapes to Init immediately |
-| Selector → AUTO | mxManRunOk = FALSE, manual buttons have no effect |
+| Selector → MAN | `mxManRunOk = TRUE`, SFC escapes to Init immediately |
+| Selector → AUTO | `mxManRunOk = FALSE`, manual buttons disabled |
 | E-Stop pressed | All outputs FALSE, SFC resets to Init |
-| Cycle Stop pressed | Finishes cycle, stops at home |
+| Cycle Stop pressed | Finishes current cycle, stops at home |
 
 ---
 
@@ -167,26 +258,16 @@ init, Aout, drillDown, drillUp, Ain, Bout, Bin
 |--------|------|---------|
 | `ix` | Digital Input | `ixSliderAout` |
 | `qx` | Digital Output | `qxSliderAout` |
-| `mx` | Internal memory BOOL | `mxAutoRunOk` |
+| `mx` | Internal BOOL | `mxAutoRunOk` |
 | `fb` | Function Block instance | `fbBlink` |
-| `mi` | Internal memory INT | `miSeq` |
-
----
-
-## 🚀 How to Run
-
-1. Open `TwinCAT Project Drill.sln` in TwinCAT 3 XAE
-2. Select runtime: `<UmRT_Default>`
-3. Click **Activate Configuration** → OK
-4. Start the PLC
-5. Open the **Visualization** in PLCSim to interact with the machine
+| `mi` | Internal INT | `miSeq` |
 
 ---
 
 ## 📋 Prerequisites
 
 - TwinCAT 3 XAE (version 3.1 or later)
-- Windows PC with TwinCAT runtime
+- Windows 10 or 11 (64-bit)
 - No external hardware required — fully simulated
 
 ---
@@ -195,12 +276,12 @@ init, Aout, drillDown, drillUp, Ain, Bout, Bin
 
 - EU Machinery Regulation (EU) 2023/1230
 - IEC 61131-3 Programming Languages Standard
-- University West — Lecture 5: Programming Structure
+- University West — Industrial Automation, Lecture 5
 
 ---
 
 ## 👤 Author
 
-**Ash**  
-University West — Industrial Automation Program  
+**Tejashwi K J**  
+MSc Robotics — University West, Trollhättan  
 2025
